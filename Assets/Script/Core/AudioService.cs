@@ -34,6 +34,10 @@ namespace Script.Core
                     audioSource.clip = clip;
                     audioSource.loop = true;
                 }
+                else if (clip.name == AudioConstans.Damage)
+                {
+                    audioSource.clip = clip;
+                }
                 audioSource.clip = clip;
                 break;
             }

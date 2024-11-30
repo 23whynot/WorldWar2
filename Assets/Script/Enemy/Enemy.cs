@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Script.Animation;
+using Script.Constans;
 using Script.Core;
 using Script.Enemy;
 using UnityEngine;
@@ -14,23 +15,25 @@ public class Enemy : MonoBehaviour, IPoolableObject
     [SerializeField] private CapsuleCollider2D capsuleCollider;
 
 
-    private Score _score;
+    private GameScore _gameScore;
     private EnemySpawner _spawner;
     private Character _character;
     private Tweener _tween;
     private Coroutine _deathCoroutine;
+    private AudioService _audioService;
     
     public bool IsActive { get; private set; }
 
-    public void Init(Character character, EnemyController enemyController, ObjectPool objectPool, Transform target, EnemySpawner enemySpawner, Score score, AudioService audioService)
+    public void Init(Character character, EnemyController enemyController, ObjectPool objectPool, Transform target, EnemySpawner enemySpawner, GameScore gameScore, AudioService audioService)
     {
         _character = character;
         _spawner = enemySpawner;
-        _score = score;
+        _gameScore = gameScore;
+        _audioService = audioService;
 
         combatComponent.Init(objectPool, bulletPrefab, target, firePoint);
         
-        enemyBehavior.Init(animationController, enemyController, _character, combatComponent, this, audioService);
+        enemyBehavior.Init(animationController, enemyController, _character, combatComponent, this, _audioService);
         
         enemyBehavior.StartBehavior();
     }
@@ -58,8 +61,9 @@ public class Enemy : MonoBehaviour, IPoolableObject
 
     private void OnHit()
     {
+        _audioService.PlaySound(AudioConstans.Damage);
         capsuleCollider.enabled = false;
-        _score.Increase(_character.ScoreCost);
+        _gameScore.Increase(_character.ScoreCost);
         enemyBehavior.Death();
         _spawner.EnemyDeactivated();
     }

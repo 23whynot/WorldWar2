@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using Script.Core;
 using Script.Enemy;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemyFactory : MonoBehaviour
 {
     [SerializeField] private AudioService audioService;
-    [SerializeField] private Score score;
+    [FormerlySerializedAs("score")] [SerializeField] private GameScore gameScore;
     [SerializeField] private ObjectPool objectPool;
     [SerializeField] private EnemyController enemyController;
     [SerializeField] private EnemySpawner enemySpawner;
@@ -37,7 +38,7 @@ public class EnemyFactory : MonoBehaviour
     {
         T enemy = objectPool.GetObject<T>();
         enemy.transform.position = spawnPoint.position;
-        enemy.Init(character, enemyController, objectPool, target, enemySpawner, score, audioService);
+        enemy.Init(character, enemyController, objectPool, target, enemySpawner, gameScore, audioService);
 
         return enemy;
     }

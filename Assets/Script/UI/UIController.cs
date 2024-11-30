@@ -48,7 +48,7 @@ namespace Script.UI
             pauseMenu.SetActive(false);
             deathMenu.SetActive(true);
         
-            Time.timeScale = 0f;
+            Time.timeScale = 1f;
         }
 
         public void OpenSettingsMenu()

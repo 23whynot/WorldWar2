@@ -3,39 +3,52 @@ using UnityEngine;
 
 namespace Script.Core
 {
-    public class Score : MonoBehaviour
+    public class GameScore : MonoBehaviour
     {
-        [SerializeField] private int maxScore = 2;
+        [SerializeField] private SaveLoad saveLoad;
+        [SerializeField] private Health health;
+        [SerializeField] private int maxScore;
 
-        private int score;
+        private int count;
+
+        private void Start()
+        {
+            health.OnDeath += SaveScore;
+        }
+
+        private void SaveScore()
+        {
+            saveLoad.SaveData(count);
+        }
 
         public event Action<int> OnScoreChanged;
 
         public event Action OnMaxScore;
 
-        public int GetCount()
-        {
-            return score;
-        }
-
+    
         private void Awake()
         {
-            OnScoreChanged?.Invoke(score);
+            OnScoreChanged?.Invoke(count);
         }
 
         public void Increase(int amount)
         {
-            score += amount;
-            OnScoreChanged?.Invoke(score);
+            count += amount;
+            OnScoreChanged?.Invoke(count);
             CheckMaxScore();
         }
 
         private void CheckMaxScore()
         {
-            if (score >= maxScore)
+            if (count >= maxScore)
             {
                 OnMaxScore?.Invoke();
             }
+        }
+
+        private void OnDisable()
+        {
+            health.OnDeath -= SaveScore;
         }
     }
 }

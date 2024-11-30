@@ -1,27 +1,28 @@
 using Script.Core;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.UI
 {
     public class ScoreUI : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI _scoreText;
-        [SerializeField] private Score _score;
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private GameScore gameScore;
 
         private void Awake()
         {
-            _score.OnScoreChanged += UpdateScore;
+            gameScore.OnScoreChanged += UpdateGameScore;
         }
 
-        private void UpdateScore(int score)
+        private void UpdateGameScore(int score)
         {
-            _scoreText.text = score.ToString();
+            scoreText.text = score.ToString();
         }
 
         private void OnDestroy()
         {
-            _score.OnScoreChanged -= UpdateScore;
+            gameScore.OnScoreChanged -= UpdateGameScore;
         }
     }
 }

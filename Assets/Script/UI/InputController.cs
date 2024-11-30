@@ -1,10 +1,13 @@
+using System;
+using Script.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.UI
 {
-    public class UiInputController : MonoBehaviour
+    public class InputController : MonoBehaviour
     {
+        [SerializeField] private Health health;
         [SerializeField] UIController uiController;
         [SerializeField] Button pauseButton;
         [SerializeField] Button resumeButton;
@@ -23,6 +26,18 @@ namespace Script.UI
             restartButton.onClick.AddListener(uiController.RestartGame);
             exitFromDeathMenuButton.onClick.AddListener(uiController.LoadMainMenu);
             exitFromSettingsMenuButton.onClick.AddListener(uiController.OpenPauseMenu);
+            
+            health.OnDeath += OpenDeathMenu;
+        }
+
+        private void OpenDeathMenu()
+        {
+            uiController.OpenDeathMenu();
+        }
+
+        private void OnDisable()
+        {
+            health.OnDeath -= OpenDeathMenu;
         }
     }
 }
