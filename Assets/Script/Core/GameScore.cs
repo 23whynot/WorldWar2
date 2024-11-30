@@ -10,7 +10,13 @@ namespace Script.Core
         private int score;
 
         public event Action<int> OnScoreChanged;
+
         public event Action OnMaxScore;
+
+        public int GetCount()
+        {
+            return score;
+        }
 
         private void Awake()
         {
