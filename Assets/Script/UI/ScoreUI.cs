@@ -2,17 +2,24 @@ using Script.Core;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Zenject;
 
 namespace Script.UI
 {
     public class ScoreUI : MonoBehaviour
     {
         [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private GameScore gameScore;
+        private GameScore _gameScore;
 
-        private void Awake()
+        [Inject]
+        public void Construct(GameScore gameScore)
         {
-            gameScore.OnScoreChanged += UpdateGameScore;
+            _gameScore = gameScore;
+        }
+
+        private void Start()
+        {
+            _gameScore.OnScoreChanged += UpdateGameScore;
         }
 
         private void UpdateGameScore(int score)
@@ -22,7 +29,7 @@ namespace Script.UI
 
         private void OnDestroy()
         {
-            gameScore.OnScoreChanged -= UpdateGameScore;
+            _gameScore.OnScoreChanged -= UpdateGameScore;
         }
     }
 }

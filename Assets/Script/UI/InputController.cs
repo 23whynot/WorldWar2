@@ -2,12 +2,12 @@ using System;
 using Script.Core;
 using UnityEngine;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Script.UI
 {
     public class InputController : MonoBehaviour
     {
-        [SerializeField] private Health health;
         [SerializeField] UIController uiController;
         [SerializeField] Button pauseButton;
         [SerializeField] Button resumeButton;
@@ -16,6 +16,14 @@ namespace Script.UI
         [SerializeField] Button restartButton;
         [SerializeField] Button exitFromDeathMenuButton;
         [SerializeField] Button exitFromSettingsMenuButton;
+
+        private Health _health;
+
+        [Inject]
+        public void Construct(Health health)
+        {
+            _health = health;
+        }
 
         private void Start()
         {
@@ -27,7 +35,7 @@ namespace Script.UI
             exitFromDeathMenuButton.onClick.AddListener(uiController.LoadMainMenu);
             exitFromSettingsMenuButton.onClick.AddListener(uiController.OpenPauseMenu);
             
-            health.OnDeath += OpenDeathMenu;
+            _health.OnDeath += OpenDeathMenu;
         }
 
         private void OpenDeathMenu()
@@ -37,7 +45,7 @@ namespace Script.UI
 
         private void OnDisable()
         {
-            health.OnDeath -= OpenDeathMenu;
+            _health.OnDeath -= OpenDeathMenu;
         }
     }
 }

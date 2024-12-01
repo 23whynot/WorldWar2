@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Script.Enemy
 {
-   public class EnemyController : MonoBehaviour
+   public class EnemyPositionContainer : MonoBehaviour
    {
       [SerializeField] Transform maxPoint;
       [SerializeField] Transform minPoint;

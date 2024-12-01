@@ -4,6 +4,7 @@
 
 ## Features
 
+- **Zenject**: Uses Zenject for dependency injection, ensuring a modular and easily testable codebase.
 - **Android Support**: Optimized for Android devices.
 - **Tilemaps**: Utilizes the tilemap system for flexible and optimized level design.
 - **Score Saving**: Game progress is saved in a JSON file to keep your score.
@@ -89,3 +90,4 @@ The source code is available on [GitHub](https://github.com/23whynot/WorldWar2).
 ---
 
 Enjoy the game! 🎮
+

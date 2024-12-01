@@ -1,44 +1,47 @@
 using System.Collections.Generic;
-using Script.Core;
+using Script.Core.ObjectPool;
 using Script.Enemy;
 using UnityEngine;
-using UnityEngine.Serialization;
+using Zenject;
 
-public class EnemyFactory : MonoBehaviour
+public class EnemyFactory
 {
-    [SerializeField] private AudioService audioService;
-    [FormerlySerializedAs("score")] [SerializeField] private GameScore gameScore;
-    [SerializeField] private ObjectPool objectPool;
-    [SerializeField] private EnemyController enemyController;
-    [SerializeField] private EnemySpawner enemySpawner;
-    [SerializeField] private Transform spawnPoint;
-    [SerializeField] private Transform target;
-    [SerializeField] private GameObject enemyPrefab;
-    [SerializeField] private List<Character> characterList;
-    [SerializeField] private int preloadCount = 5;
+    private EnemySpawner _enemySpawner;
+    private ObjectPool _objectPool;
+    private GameObject _enemyPrefab;
+    private int _preloadCount = 5;
+    private Character _character;
+    
+    
+    [Inject]
+    public void Construct(
+        ObjectPool objectPool, 
+        EnemySpawner enemySpawner)
+    {
+        _objectPool = objectPool;
+        _enemySpawner = enemySpawner;
+        
+        _enemyPrefab = Resources.Load<GameObject>("Prefabs/" + ResourcesConstans.PrefabEnemy);
+        
+        _objectPool.RegisterPrefab<Enemy>(_enemyPrefab, _preloadCount);
+        
+        _character = Resources.Load<Character>("Characters/" + ResourcesConstans.CharacterEnemyGerman);
+    }
+
+
+
 
     public void SpawnRandomEnemy()
     {
-        Spawn<Enemy>(GetCharacter());
-    }
-
-    private void Start()
-    {
-        objectPool.RegisterPrefab<Enemy>(enemyPrefab, preloadCount);
-    }
-
-    private Character GetCharacter()
-    {
-        int randomIndex = Random.Range(0, characterList.Count);
-        return characterList[randomIndex];
+        Spawn<Enemy>(_character);
     }
 
 
     private T Spawn<T>(Character character) where T : Enemy
     {
-        T enemy = objectPool.GetObject<T>();
-        enemy.transform.position = spawnPoint.position;
-        enemy.Init(character, enemyController, objectPool, target, enemySpawner, gameScore, audioService);
+        T enemy = _objectPool.GetObject<T>();
+        enemy.transform.position = _enemySpawner.GetSpawnPointTransform().position;
+        enemy.Init(character);
 
         return enemy;
     }

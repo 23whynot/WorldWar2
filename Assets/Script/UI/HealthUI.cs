@@ -2,19 +2,26 @@ using Script.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Zenject;
 
 namespace Script.UI
 {
-    public class HealhUI : MonoBehaviour
+    public class HealthUI : MonoBehaviour
     {
-        [SerializeField] private Health health;
         [SerializeField] private Image[] healthImages;
     
         private int currentHealthIndex;
+        private Health _health;
+
+        [Inject]
+        public void Construct(Health health)
+        {
+            _health = health;
+        }
 
         private void Start()
         {
-            health.OnHealthChanged += TakeDamage;
+            _health.OnHealthChanged += TakeDamage;
 
             currentHealthIndex = healthImages.Length - 1;
         }
@@ -30,7 +37,7 @@ namespace Script.UI
 
         private void OnDestroy()
         {
-            health.OnHealthChanged -= TakeDamage;
+            _health.OnHealthChanged -= TakeDamage;
         }
     }
 }

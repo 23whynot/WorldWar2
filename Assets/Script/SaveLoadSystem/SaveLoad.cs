@@ -1,44 +1,54 @@
 using System;
-using Script.Core;
-using Script.SaveLoadSystem;
 using UnityEngine;
+using Zenject;
 
-public class SaveLoad : MonoBehaviour
+namespace Script.SaveLoadSystem
 {
-    [SerializeField] private SaveLoadManager saveLoadManager;
-    
-    public event Action OnLoaded;
-    
-    public int loadedData { get; private set; }
+    public class SaveLoad : IInitializable
 
-    private void Start()
     {
-        LoadData();
-    }
+        private SaveLoadManager _saveLoadManager;
 
-    public void SaveData(int score)
-    {
-        if (score >= loadedData)
+        [Inject]
+        public void Construct(SaveLoadManager saveLoadManager)
         {
-            GameData gameData = new GameData(score);
-            saveLoadManager.SaveGame(gameData);
+            _saveLoadManager = saveLoadManager;
         }
-    }
 
-    private void LoadData()
-    {
-        GameData data = saveLoadManager.LoadGame();
-        if (data == null)
+        public event Action OnLoaded;
+
+        public int loadedData { get; private set; }
+
+
+        public void SaveData(int score)
         {
-            Debug.Log("Нет файла");
-            loadedData = 0; 
+            if (score >= loadedData)
+            {
+                GameData gameData = new GameData(score);
+                _saveLoadManager.SaveGame(gameData);
+            }
         }
-        else
+
+        private void LoadData()
         {
-            loadedData = data.Data; 
-            Debug.Log("Данные загружены: " + loadedData);
+            GameData data = _saveLoadManager.LoadGame();
+            if (data == null)
+            {
+                Debug.Log("Нет файла");
+                loadedData = 0;
+            }
+            else
+            {
+                loadedData = data.Data;
+                Debug.Log("Данные загружены: " + loadedData);
+            }
+
+            OnLoaded?.Invoke();
         }
-        
-        OnLoaded?.Invoke();
+
+        public void Initialize()
+        {
+            LoadData();
+        }
     }
 }

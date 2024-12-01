@@ -1,9 +1,9 @@
 using System;
-using UnityEngine;
+
 
 namespace Script.Core
 {
-    public class Health : MonoBehaviour
+    public class Health
     {
         private int _count = 3;
    

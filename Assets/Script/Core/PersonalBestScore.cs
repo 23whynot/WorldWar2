@@ -1,24 +1,31 @@
-using TMPro;
+using Script.SaveLoadSystem;
+using Script.UI;
 using UnityEngine;
+using Zenject;
 
-
-public class PersonalBestScore : MonoBehaviour
+namespace Script.Core
 {
-    [SerializeField] private SaveLoad load;
-    [SerializeField] private PBScoreUI pBScoreUI;
-
-    private void Awake()
+    public class PersonalBestScore : MonoBehaviour
     {
-        load.OnLoaded += SetCount;
-    }
+        [SerializeField] private PBScoreUI pBScoreUI;
 
-    private void SetCount()
-    {
-        pBScoreUI.SetCount(load.loadedData);
-    }
+        private SaveLoad _load;
 
-    private void OnDisable()
-    {
-        load.OnLoaded -= SetCount;
+        [Inject]
+        public void Construct(SaveLoad saveLoad)
+        {
+            _load = saveLoad;
+            _load.OnLoaded += SetCount;
+        }
+
+        private void SetCount()
+        {
+            pBScoreUI.SetCount(_load.loadedData);
+        }
+
+        private void OnDisable()
+        {
+            _load.OnLoaded -= SetCount;
+        }
     }
 }

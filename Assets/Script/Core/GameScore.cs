@@ -1,24 +1,32 @@
 using System;
-using UnityEngine;
+using Script.SaveLoadSystem;
+using Zenject;
 
 namespace Script.Core
 {
-    public class GameScore : MonoBehaviour
-    {
-        [SerializeField] private SaveLoad saveLoad;
-        [SerializeField] private Health health;
-        [SerializeField] private int maxScore;
+    public class GameScore
+    { 
+        private SaveLoad _saveLoad;
+        private int maxScore;
 
         private int count;
+        private Health _health;
+
+        [Inject]
+        public void Construct(Health health, SaveLoad saveLoad)
+        {
+            _health = health;
+            _saveLoad = saveLoad;
+        }
 
         private void Start()
         {
-            health.OnDeath += SaveScore;
+            _health.OnDeath += SaveScore;
         }
 
         private void SaveScore()
         {
-            saveLoad.SaveData(count);
+            _saveLoad.SaveData(count);
         }
 
         public event Action<int> OnScoreChanged;
@@ -48,7 +56,7 @@ namespace Script.Core
 
         private void OnDisable()
         {
-            health.OnDeath -= SaveScore;
+            _health.OnDeath -= SaveScore;
         }
     }
 }

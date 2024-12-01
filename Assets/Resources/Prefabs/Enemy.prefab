@@ -117,9 +117,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyBehavior: {fileID: 3245824256198701708}
-  animationController: {fileID: 8982455633818884852}
   combatComponent: {fileID: 1936358127862448366}
-  bulletPrefab: {fileID: 6548808893812070631, guid: 99c168a81f5d1e64387896b664f3f9d5, type: 3}
   firePoint: {fileID: 8812743836700035256}
   capsuleCollider: {fileID: 2880091428384862387}
 --- !u!114 &1936358127862448366
@@ -134,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3ca25f87ddddb09449b43982fec7ab8f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _preLoadCount: 10
+  preLoadCount: 10
 --- !u!114 &3245824256198701708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,6 +145,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7c7d5b0f781649468d6cb83ad9fe33f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 4865018001925610869}
+  firePoint: {fileID: 8812743836700035256}
 --- !u!50 &1490023740184473622
 Rigidbody2D:
   serializedVersion: 4
@@ -185,7 +185,6 @@ GameObject:
   - component: {fileID: 8060739674171623202}
   - component: {fileID: 4865018001925610869}
   - component: {fileID: 8638578307477900555}
-  - component: {fileID: 8982455633818884852}
   m_Layer: 0
   m_Name: EnemyVisual
   m_TagString: Untagged
@@ -281,16 +280,3 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8982455633818884852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8302450135630269929}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85d207e566e6e844a8a9ef199872e7c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 4865018001925610869}

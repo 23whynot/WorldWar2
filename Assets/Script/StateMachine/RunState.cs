@@ -9,22 +9,22 @@ public class RunState : IState
 {
     private Transform _enemyTransform;
     private AnimationController _animationController;
-    private EnemyController _enemyController;
+    private EnemyPositionContainer _enemyPositionContainer;
     private Character _character;
     
     private Tween _tween;
     
-    public RunState(AnimationController controller, Transform enemyTransform, EnemyController enemyController, Character character)
+    public RunState(AnimationController controller, Transform enemyTransform, EnemyPositionContainer enemyPositionContainer, Character character)
     {
         _animationController = controller;
         _enemyTransform = enemyTransform;
-        _enemyController = enemyController;
+        _enemyPositionContainer = enemyPositionContainer;
         _character = character;
     }
     public void Enter()
     {
         _animationController.StartAnimationRun();
-        _tween = _enemyTransform.DOMove(_enemyController.GetRandomPosition(), _character.Speed).SetEase(Ease.Linear).OnComplete(() => {
+        _tween = _enemyTransform.DOMove(_enemyPositionContainer.GetRandomPosition(), _character.Speed).SetEase(Ease.Linear).OnComplete(() => {
             _tween.Kill();
         });
     }

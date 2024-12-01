@@ -1,14 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PBScoreUI : MonoBehaviour
+namespace Script.UI
 {
-    [SerializeField] private TextMeshProUGUI scoreText;
-
-    public void SetCount(int score)
+    public class PBScoreUI : MonoBehaviour
     {
-        scoreText.text = score.ToString();
+        [SerializeField] private TextMeshProUGUI scoreText;
+
+        public void SetCount(int score)
+        {
+            scoreText.text = score.ToString();
+        }
     }
 }

@@ -17,6 +17,6 @@ public class IdleState : IState
 
     public void Exit()
     {
-        
+        _animationController.StartAnimationIdle();
     }
 }

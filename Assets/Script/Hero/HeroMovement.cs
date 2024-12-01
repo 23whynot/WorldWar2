@@ -12,13 +12,15 @@ namespace Script.Hero
     {
         [SerializeField] private CombatComponent combatComponent;
         [SerializeField] private AudioService audioService;
-        [SerializeField] private global::Hero hero;
-        [SerializeField] private AnimationController animationController;
+        [SerializeField] private Hero hero;
         [SerializeField] private Transform startPosition;
+        [SerializeField] private Transform firePoint;
         [SerializeField] private Button upButton;
         [SerializeField] private Button downButton;
         [SerializeField] private Button fireButton;
+        [SerializeField] private Animator animator;
 
+        private AnimationController _animationController;
         private bool _iCanMove;
         private Tween _tween;
         private bool _isMovingUp;
@@ -26,14 +28,16 @@ namespace Script.Hero
 
         private void Start()
         {
+            _animationController = new AnimationController(animator);
+            
             GoToStartPosition();
-        
+
             AddEventTrigger(upButton, EventTriggerType.PointerDown, eventData => _isMovingUp = true);
             AddEventTrigger(upButton, EventTriggerType.PointerUp, eventData => _isMovingUp = false);
 
             AddEventTrigger(downButton, EventTriggerType.PointerDown, eventData => _isMovingDown = true);
             AddEventTrigger(downButton, EventTriggerType.PointerUp, eventData => _isMovingDown = false);
-        
+
             fireButton.onClick.AddListener(Shoot);
         }
 
@@ -55,28 +59,28 @@ namespace Script.Hero
                 }
                 else
                 {
-                    animationController.StopAnimationShoot();
-                    animationController.StopAnimationRun();
+                    _animationController.StopAnimationShoot();
+                    _animationController.StopAnimationRun();
                 }
             }
         }
 
         private void Shoot()
         {
-            animationController.StartAnimationShoot();
-            combatComponent.Shoot();
+            _animationController.StartAnimationShoot();
+            combatComponent.Shoot(firePoint);
             audioService.PlaySound(AudioConstans.Shoot);
         }
 
         private void GoToStartPosition()
         {
-            animationController.StartAnimationRun();
+            _animationController.StartAnimationRun();
             _tween = transform.DOMove(startPosition.position, hero.Character.Speed)
                 .SetEase(Ease.Linear)
                 .OnComplete(() =>
                 {
                     _iCanMove = true;
-                    animationController.StopAnimationRun();
+                    _animationController.StopAnimationRun();
                     _tween.Kill();
                 });
         }
@@ -84,7 +88,7 @@ namespace Script.Hero
         private void Move(Vector3 vector)
         {
             transform.position += vector * hero.Character.Speed * Time.deltaTime;
-            animationController.StartAnimationRun();
+            _animationController.StartAnimationRun();
         }
 
         private void AddEventTrigger(Button button, EventTriggerType triggerType, UnityEngine.Events.UnityAction<BaseEventData> action)
